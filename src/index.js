@@ -5,9 +5,7 @@ const OCCUPIED = "+";
 // Helper functions
 
 const searcher = (clusters, coord, currentCluster, hdb) => {
-    const [a, b] = coord.split("");
-    const i = parseInt(a);
-    const j = parseInt(b);
+    const { i, j } = coord;
     const neighbours = [
         [i - 1, j - 1],
         [i - 1, j],
@@ -22,7 +20,7 @@ const searcher = (clusters, coord, currentCluster, hdb) => {
         const [x, y] = neighbour;
         const outOfBound =
             x < 0 || x >= hdb.length || y < 0 || y >= hdb[0].length;
-        const newCoord = toCoord(x, y);
+        const newCoord = { i: x, j: y };
         if (!outOfBound && !isAlreadyVisited(newCoord, clusters)) {
             if (hdb[x][y] === OCCUPIED) {
                 clusters[currentCluster].push(newCoord);
@@ -36,9 +34,14 @@ const isAlreadyVisited = (coord, clusters) => {
     let isVisited = false;
     if (clusters[0]) {
         clusters.forEach((cluster) => {
-            if (cluster.includes(coord)) {
-                isVisited = true;
-            }
+            cluster.forEach((existingCoord) => {
+                if (
+                    existingCoord.i === coord.i &&
+                    existingCoord.j === coord.j
+                ) {
+                    isVisited = true;
+                }
+            });
         });
     }
     return isVisited;
@@ -62,7 +65,7 @@ const starterFunction = (input) => {
         const floor = hdb[i];
         for (let j = 0; j < floor.length; j++) {
             const unit = hdb[i][j];
-            const coord = toCoord(i, j);
+            const coord = { i, j };
             if (unit === OCCUPIED && !isAlreadyVisited(coord, clusters)) {
                 const currentCluster = clusters.length;
                 clusters.push([coord]);

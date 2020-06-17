@@ -7,15 +7,21 @@ test("should find 1 cluster", () => {
 
 test("should return false", () => {
     const clusters = [
-        ["22", "23"],
-        ["02", "03"],
+        [
+            { i: 2, j: 2 },
+            { i: 2, j: 3 },
+        ],
+        [
+            { i: 0, j: 2 },
+            { i: 0, j: 3 },
+        ],
     ];
-    expect(isAlreadyVisited("11", clusters)).toBe(false);
+    expect(isAlreadyVisited({ i: 2, j: 3 }, clusters)).toBe(true);
 });
 
 test("should return true", () => {
-    const clusters = [["11"]];
-    expect(isAlreadyVisited("11", clusters)).toBe(true);
+    const clusters = [[{ i: 1, j: 1 }]];
+    expect(isAlreadyVisited({ i: 2, j: 3 }, clusters)).toBe(false);
 });
 
 test("should find 3 clusters", () => {
